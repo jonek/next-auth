@@ -1,5 +1,19 @@
 <script lang="ts">
+  import { base } from '$app/paths'
   import { page } from "$app/stores"
+  import { signIn } from '@auth/sveltekit/client'
+
+  function login() {
+    signIn(
+      'auth0',
+      { callbackUrl: 'foobar' },
+      { scope: 'openid profile email', prompt: 'login' },
+    )
+  }
+
+  function logout() {
+    console.log('logout');
+  }
 </script>
 
 <div>
@@ -20,17 +34,17 @@
                 $page.data.session.user?.name}</strong
             >
           </span>
-          <a href="/auth/signout" class="button" data-sveltekit-preload-data="off">Sign out</a>
+          <button class="button" on:click={logout} data-sveltekit-preload-data="off">Sign out</button>
         {:else}
           <span class="notSignedInText">You are not signed in</span>
-          <a href="/auth/signin" class="buttonPrimary" data-sveltekit-preload-data="off">Sign in</a>
+          <button class="buttonPrimary" on:click={login} data-sveltekit-preload-data="off">Sign in</button>
         {/if}
       </p>
     </div>
     <nav>
       <ul class="navItems">
-        <li class="navItem"><a href="/">Home</a></li>
-        <li class="navItem"><a href="/protected">Protected</a></li>
+        <li class="navItem"><a href="{base}/">Home</a></li>
+        <li class="navItem"><a href="{base}/protected">Protected</a></li>
       </ul>
     </nav>
   </header>
